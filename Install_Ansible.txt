@@ -1,1 +1,15 @@
-This contains the steps to install Ansible on CentOS 7 based server
+This contains the steps to install Ansible on CentOS 7 based server.
+
+Configuration management systems are designed to make controlling large numbers of servers easy for administrators and operations teams. They allow you to control many different systems in an automated way from one central location.
+
+Ansible works by configuring client machines from an computer with Ansible components installed and configured. It communicates over normal SSH channels in order to retrieve information from remote machines, issue commands, and copy files.
+
+Step 1 — Installing Ansible
+
+To get Ansible for CentOS 7, first ensure that the CentOS 7 EPEL repository is installed:
+
+~]# sudo yum install epel-release
+
+Once the repository is installed, install Ansible with yum:
+
+~]# sudo yum install ansible
