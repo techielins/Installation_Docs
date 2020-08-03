@@ -1,0 +1,1 @@
+This file contains the installation docs/practices that were followed during Kubernetes training.
