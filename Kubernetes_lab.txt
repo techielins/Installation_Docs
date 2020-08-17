@@ -1,1 +1,77 @@
 This file contains the installation docs/practices that were followed during Kubernetes training.
+
+
+In this tutorial, you’ll learn how to install and use it on an existing installation of CentOS 7.
+
+Installing Docker
+
+~]# sudo yum check-update
+
+$ curl -fsSL https://get.docker.com/ | sh
+
+$ sudo systemctl start docker
+
+$ sudo systemctl status docker
+
+
+
+Excercise :
+
+Create a folder inside home directory docker
+
+$ mkdir -p docker
+
+Installing Flask on CentOS 7
+
+Flask is a micro web framework written in Python. It is classified as a microframework because it does not require particular tools or libraries. 
+
+Install Python 3 and venv
+Install Python 3.6 from the Software Collections (SCL) repositories as the default version of Python on CentOS 7 is Python 2.7.5. SCL allows you to install newer versions of python 3.x alongside the default python v2.7.5
+
+$ sudo yum install centos-release-scl
+
+Once the repository is enabled install Python 3.6 with the command below:
+
+$ sudo yum install rh-python36
+
+Creating a Virtual Environment
+
+$ mkdir flask
+$ python3 -m venv venv
+
+The directory venv created will contain a copy of the Python binary, the Pip package manager, the standard Python library and other supporting files.
+
+Next, activate the virtual environment using the activate script by issuing the command below:
+
+$ source venv/bin/activate
+
+Install Flask
+
+$ pip install Flask
+
+
+Running a container using Dockerfile
+
+Create a Dockerfile inside docker folder
+
+$ cd docker
+
+$ cat Dockerfile
+FROM python:2.7-onbuild
+EXPOSE 8080
+CMD [ "python , "http_serv.py" ]
+
+$ cat requirements.txt
+Flask
+
+
+
+
+
+
+
+
+
+
+
+
