@@ -1,2 +1,173 @@
 This doc contains the steps to install Minikube in EC2 instance
 
+Minikube is a tool that makes it easy to run Kubernetes locally. Minikube runs a single-node Kubernetes cluster inside a Virtual Machine (VM) on your laptop 
+for users looking to try out Kubernetes or develop with it day-to-day
+
+Install kubectl
+
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+
+chmod +x ./kubectl
+
+~# sudo mv ./kubectl /usr/local/bin/kubectl
+
+Install Docker
+
+sudo apt-get update && \
+    sudo apt-get install docker.io -y
+
+Minikube requires Docker.
+
+Install Minikube
+
+~# curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+
+Check Minikube Version
+
+:~# minikube version
+minikube version: v1.13.0
+commit: 0c5e9de4ca6f9c55147ae7f90af97eff5befef5f-dirty
+
+We have now successfully installed Minikube!
+
+Let’s test it!
+
+Running Minikube on EC2 Ubuntu
+Become a root user.
+
+:~# sudo -i
+
+If you are not comfortable running commands as root, you must always add sudo before the commands minikube and kubectl.
+
+Start Minikube
+
+:~# sudo apt-get install conntrack
+
+:~# minikube start --vm-driver=none
+
+Check the status of Minikube
+
+:~# minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+After you have confirmed whether Minikube is working with your chosen hypervisor ( we use none here since it is deployed in AWS EC2 instance, 
+you can continue to use Minikube or you can stop your cluster. To stop,
+
+:~# minikube stop
+
+Let's create a Kubernetes Deployment using an existing image named echoserver, which is a simple HTTP server and expose it on port 8080 using --port.
+
+:~# kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+
+Output :
+
+deployment.apps/hello-minikube created
+
+To access the hello-minikube Deployment, expose it as a Service:
+
+:~# kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+Output: 
+
+service/hello-minikube exposed
+
+The option --type=NodePort specifies the type of the Service.
+
+The hello-minikube Pod is now launched but you have to wait until the Pod is up before accessing it via the exposed Service.
+
+Check if the Pod is up and running:
+
+~# kubectl get pod
+
+Output: 
+
+NAME                              READY   STATUS    RESTARTS   AGE
+hello-minikube-5d9b964bfb-rxmdc   1/1     Running   0          3m11s
+
+If the output shows the STATUS as ContainerCreating, the Pod is still being created.
+
+If the output shows the STATUS as Running, the Pod is now up and running.
+
+Get the URL of the exposed Service to view the Service details:
+
+:~# minikube service hello-minikube --url
+
+To view the details of your local cluster, copy and paste the URL you got as the output, on your browser.
+
+The output is similar to this:
+
+Hostname: hello-minikube-5d9b964bfb-rxmdc
+
+Pod Information:
+	-no pod information available-
+
+Server values:
+	server_version=nginx: 1.13.3 - lua: 10008
+
+Request Information:
+	client_address=172.17.0.1
+	method=GET
+	real path=/
+	query=
+	request_version=1.1
+	request_scheme=http
+	request_uri=http://54.166.242.60:8080/
+
+Request Headers:
+	accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+	accept-encoding=gzip, deflate
+	accept-language=en-US,en;q=0.9
+	connection=keep-alive
+	host=54.166.242.60:32633
+	upgrade-insecure-requests=1
+	user-agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36
+
+Request Body:
+	-no body in request-
+  
+  Delete the hello-minikube Service:
+  
+  :~# kubectl delete services hello-minikube
+  
+  output : 
+  service "hello-minikube" deleted
+  
+  Delete the hello-minikube Deployment:
+  
+  :~# kubectl delete deployment hello-minikube
+  
+  Output:
+  
+  deployment.apps "hello-minikube" deleted
+  
+  Stop the local Minikube cluster:
+  
+  :~# minikube stop
+  
+  The output is similar to this:
+
+Stopping "minikube"...
+"minikube" stopped.
+
+Delete the local Minikube cluster:
+
+:~# minikube delete
+
+Output:
+
+* Uninstalling Kubernetes v1.19.0 using kubeadm ...
+* Deleting "minikube" in none ...
+* Removed all traces of the "minikube" cluster.
+
+
+
+
+
+    
+
