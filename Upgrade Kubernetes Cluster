@@ -1,0 +1,100 @@
+This page explains how to upgrade a Kubernetes cluster created with kubeadm.
+
+Find the latest stable 1.22.x version using the OS package manager:
+
+#apt update
+~#apt-cache madison kubeadm
+
+Upgrading control plane nodes
+
+Drain the node
+
+Prepare the node for maintenance by marking it unschedulable and evicting the workloads:
+
+# replace <node-to-drain> with the name of your node you are draining
+~#kubectl drain <node-to-drain> --ignore-daemonsets
+
+# replace x in 1.22.x-00 with the latest patch version
+
+~#apt-mark unhold kubeadm && \
+~#apt-get update && apt-get install -y kubeadm=1.22.x-00 && \
+~#apt-mark hold kubeadm
+
+Verify that the download works and has the expected version:
+
+~#kubeadm version
+
+Verify the upgrade plan:
+
+~#kubeadm upgrade plan
+
+Choose a version to upgrade to, and run the appropriate command. For example:
+
+# replace x with the patch version you picked for this upgrade
+~#sudo kubeadm upgrade apply v1.22.x
+
+Upgrade kubelet and kubectl 
+
+# replace x in 1.22.x-00 with the latest patch version
+
+~#apt-mark unhold kubelet kubectl && \
+~#apt-get update && apt-get install -y kubelet=1.22.x-00 kubectl=1.22.x-00 && \
+~#apt-mark hold kubelet kubectl
+
+Restart the kubelet:
+
+~#sudo systemctl daemon-reload
+~#sudo systemctl restart kubelet
+
+Uncordon the node
+Bring the node back online by marking it schedulable:
+
+# replace <node-to-drain> with the name of your node
+~#kubectl uncordon <node-to-drain>
+
+Upgrade worker nodes
+
+Note: The upgrade procedure on worker nodes should be executed one node at a time.
+
+Drain the node
+
+# replace <node-to-drain> with the name of your node you are draining
+~#kubectl drain <node-to-drain> --ignore-daemonsets
+
+Upgrade kubeadm:
+
+# replace x in 1.22.x-00 with the latest patch version
+~#apt-mark unhold kubeadm && \
+~#apt-get update && apt-get install -y kubeadm=1.22.x-00 && \
+~#apt-mark hold kubeadm
+
+For worker nodes this upgrades the local kubelet configuration:
+
+~#sudo kubeadm upgrade node
+
+Upgrade kubelet and kubectl
+
+# replace x in 1.22.x-00 with the latest patch version
+~#apt-mark unhold kubelet kubectl && \
+~#apt-get update && apt-get install -y kubelet=1.22.x-00 kubectl=1.22.x-00 && \
+~#apt-mark hold kubelet kubectl
+
+Restart the kubelet:
+
+~#sudo systemctl daemon-reload
+~#sudo systemctl restart kubelet
+
+Uncordon the node
+
+Bring the node back online by marking it schedulable:
+
+# replace <node-to-drain> with the name of your node
+~#kubectl uncordon <node-to-drain>
+
+Verify the status of the cluster
+
+After the kubelet is upgraded on all nodes verify that all nodes are available again by running the following command from anywhere kubectl can access the cluster:
+
+~#kubectl get nodes
+
+The STATUS column should show Ready for all your nodes, and the version number should be updated.
