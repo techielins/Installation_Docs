@@ -1,4 +1,4 @@
-#RHEL/CentOS
+# RHEL/CentOS
 
 Add repository setting to /etc/yum.repos.d.
 ```
@@ -12,7 +12,7 @@ $ sudo yum -y update
 $ sudo yum -y install trivy
 ```
 
-#Debian/Ubuntu
+# Debian/Ubuntu
 
 Add repository to /etc/apt/sources.list.d.
 ```
@@ -23,12 +23,12 @@ sudo apt-get update
 sudo apt-get install trivy
 ```
 
-#Install Script
+# Install Script
 
 ```
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.18.3
 ```
-#Docker
+# Docker
 
 Replace [YOUR_CACHE_DIR] with the cache directory on your machine.
 ```
@@ -40,3 +40,8 @@ docker run --rm -v [YOUR_CACHE_DIR]:/root/.cache/ aquasec/trivy:0.18.3 [YOUR_IMA
 ```
 Please re-pull latest aquasec/trivy if an error occurred.
 
+# Quick Start
+Simply specify an image name (and a tag).
+```
+trivy image [YOUR_IMAGE_NAME]
+```
