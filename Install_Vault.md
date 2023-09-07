@@ -138,6 +138,38 @@ systemctl restart vault
 Your Vault server should now be up and running on HTTPS.
 ![image](https://github.com/techielins/Installation_Docs/assets/68058598/45a85f76-303b-4a84-b60e-948ca54070f2)
 
+Step 8 : Initialize Vault
+First, run the following command to see current Vault status:
+```
+vault status
+```
+![image](https://github.com/techielins/Installation_Docs/assets/68058598/470ec7a6-3c23-449e-9184-b6704428ad0a)
+As in the image above, the output displays that Vault is sealed and not initialized yet.
+To change its status, you need three (3) keys you can find by running the command:
+```
+vault operator init
+```
+The terminal will return five (5) Unseal Keys as well as an Initial Root Token. Also, it explains that anytime the Vault package is re-sealed, restarted, 
+or stopped, you will need to supply at least three (3) of these keys. If you do not provide the specified keys, Vault will remain sealed. Therefore, copy all 
+five keys and paste them in a separate file.
+
+Once you have at least 3 unseal keys, run the command:
+```
+vault operator unseal
+```
+Copy and paste the first key, and hit Enter.
+Repeat the same procedure for the Unseal Key 2 and 3.
+The last step to unseal Vault is to run the following command with the Initial Root Token (listed with the Unseal Keys):
+```
+vault login [root_token]
+```
+ Now, check the status again to verify that the software has been initialized:
+ ```
+vault status
+```
+
+![image](https://github.com/techielins/Installation_Docs/assets/68058598/3279afc8-ee56-41fc-929c-e36ed5e30fab)
+
 
 
 
