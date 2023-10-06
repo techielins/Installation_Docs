@@ -21,7 +21,7 @@ Verify that it’s running:
 sudo systemctl status docker
 ```
 The output should be similar to the following, showing that the service is active and running:
-
+```
 ● docker.service - Docker Application Container Engine
    Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled)
    Active: active (running) since Thu 2020-07-09 11:57:50 UTC; 54s ago
@@ -31,7 +31,7 @@ The output should be similar to the following, showing that the service is activ
    Memory: 41.9M
    CGroup: /system.slice/docker.service
            └─5474 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-
+```
 Lastly, make sure it starts at every server reboot:
 ```
 sudo systemctl enable docker
