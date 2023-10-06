@@ -1,25 +1,25 @@
-This document contains the steps to install Docker on CentOS 7 based server.
+## This document contains the steps to install Docker on CentOS 7 based server.
 
 Docker is an application that makes it simple and easy to run application processes in a container, which are like virtual machines
 
 Step 1 — Installing Docker
 
 To get the latest and greatest version, install Docker from the official Docker repository.
-
-~]# sudo yum check-update
-
+```
+sudo yum check-update
+```
 Now run this command. It will add the official Docker repository, download the latest version of Docker, and install it:
-
-~]# curl -fsSL https://get.docker.com/ | sh
-
+```
+curl -fsSL https://get.docker.com/ | sh
+```
 After installation has completed, start the Docker daemon:
-
-~]# sudo systemctl start docker
-
+```
+sudo systemctl start docker
+```
 Verify that it’s running:
-
-~]# sudo systemctl status docker
-
+```
+sudo systemctl status docker
+```
 The output should be similar to the following, showing that the service is active and running:
 
 ● docker.service - Docker Application Container Engine
@@ -33,8 +33,8 @@ The output should be similar to the following, showing that the service is activ
            └─5474 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 
 Lastly, make sure it starts at every server reboot:
-
-~]# sudo systemctl enable docker
-
+```
+sudo systemctl enable docker
+```
 
 
